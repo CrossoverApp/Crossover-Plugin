@@ -124,5 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
 var userTabs = ['http://reddit.com', 'http://google.com', 'http://pcpartpicker.com/'];
 $('#openTab').click( function() {
     //window.open('http://www.google.com','GoogleWindow', 'width=800, height=600');
-    chrome.tabs.create({"url": userTabs[0]});
+    for(i=0; i < userTabs.length; i++){
+    chrome.tabs.create({"url": userTabs[i]});
+  }
 });
