@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(
     if( request.message === "clicked_browser_action" ) {
       var firstHref = $("a[href^='http']").eq(0).attr("href");
 
-      console.log(firstHref);
+      console.log("this is working");
 
 
       //passing url back to background.js to open a new tab with firstHref
@@ -14,3 +14,4 @@ chrome.runtime.onMessage.addListener(
     }
   }
 );
+

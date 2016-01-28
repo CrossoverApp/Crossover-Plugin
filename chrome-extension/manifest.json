@@ -8,19 +8,21 @@
     "matches": [
       "<all_urls>"
     ],
-    "js": ["jquery-2.1.3.min.js", "content.js"]
+    "js": ["jquery-2.1.3.min.js", "content.js", "popup.js"]
   }
 ],
 "browser_action": {
   "default_icon": "the_doge.png",
-  "default_title": "Top Doge"
+  "default_title": "Top Doge",
+  "default_popup": "popup.html"
  
 },
 "permissions": [
    "tabs"
 ],
 "background": {
-  "scripts": ["background.js"]
+  "scripts": ["background.js", "popup.js"]
 }
 
 }
+

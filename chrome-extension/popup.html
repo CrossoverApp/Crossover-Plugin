@@ -6,7 +6,7 @@
  -->
 <html>
   <head>
-    <title>Getting Started Extension's Popup</title>
+    <title>Crossover</title>
     <style>
       body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
@@ -20,20 +20,29 @@
         max-width: 500px;
       }
     </style>
-
+    <link rel='stylesheet' type='text/css' href='popupstyle.css'/>
+    <script src="/jquery-2.1.3.min.js"></script>
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-    <script src="popup.js"></script>
+    
+   
   </head>
   <body>
-    <div id="status">
-      <p>this is pretty cool</p>
+    <div id="displayBody">
+      <p id="greeting">this is pretty cool</p>
+      <div id="tabButtons">
+      <input type="button" class="popButton" value="LogIn"/>
+      <input type="button" class="popButton" value="view groups"/>
+      <input type="button" class="popButton" id="openTab" value="open tabs"/>
     </div>
-    <img id="image-result" hidden>
+    </div>
+    
   </body>
 </html>
 
+<script src="popup.js"></script>
+<script src="background.js"></script>
