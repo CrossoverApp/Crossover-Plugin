@@ -33,21 +33,26 @@
   </head>
   <body>
     <div id="displayBody">
-      <p id="greeting">this is pretty cool</p>
-      <div id="tabButtons">
+      <p id="greeting">Crossover bebeh!</p>
+      <div id="landingPage">
       <input type="button" class="popButton" id="logIn" value="LogIn"/>
+    </div>
+    </div>
+
+    <!-- hidden by default will recieve templates -->
+    <div id="loginInfo">
+    </div>
+
+    <template id='loginStuff'>
+      <input type='text' id="name" placeholder="username or email"/>
+      <input type='text' id = 'pass' placeholder="l33t passwords"/>
+      <input type="button" class="popButton" id="subButton" value="submit"/>
+    </template>
+
+    <template id='userStuff'>
       <input type="button" class="popButton" value="view groups"/>
       <input type="button" class="popButton" id="openTab" value="open tabs"/>
-    </div>
-    </div>
-
-    <!-- hidden by default -->
-    <div id="loginInfo">
-      <input type='text' placeholder="username or email"/>
-      <input type='text' placeholder="l33t passwords"/>
-      <input type="button" class="popButton" id="subButton" value="submit"/>
-    </div>
-
+    </template>
   </body>
 </html>
 

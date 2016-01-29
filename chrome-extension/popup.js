@@ -130,5 +130,34 @@ $('#openTab').click( function() {
 });
 
 $('#logIn').click( function() {
+  var text = $("#loginStuff").html()
+  
+   $('#loginInfo').append(text);
    $('#loginInfo').toggle("show");
 });
+
+
+
+$('#loginInfo').on('click', '#subButton', function() {
+  var name = $("#name").val();
+  var pass = $("#pass").val();
+
+  if(name == "bob" && pass == "doge"){
+    var text = $("#userStuff").html()
+
+    $('#loginInfo').html("");
+    $('#loginInfo').append(text);
+    
+  }
+  else{
+    alert("loser!");
+  }
+  
+  });
+
+$('#loginInfo').on('click', '#openTab', function() {
+     for(i=0; i < userTabs.length; i++){
+    chrome.tabs.create({"url": userTabs[i]});
+  }
+  
+  });
