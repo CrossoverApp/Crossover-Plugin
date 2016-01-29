@@ -128,3 +128,7 @@ $('#openTab').click( function() {
     chrome.tabs.create({"url": userTabs[i]});
   }
 });
+
+$('#logIn').click( function() {
+   $('#loginInfo').toggle("show");
+});
