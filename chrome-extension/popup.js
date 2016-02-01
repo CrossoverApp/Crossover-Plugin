@@ -141,18 +141,29 @@ $('#logIn').click( function() {
 $('#loginInfo').on('click', '#subButton', function() {
   var name = $("#name").val();
   var pass = $("#pass").val();
+  var text = $("#userStuff").html();
+  //fake@gmail.com 1234
+  $.post("http://crossoverdev.parseapp.com/user", {
+        email: name,
+        password: pass
+      }, function(response) {
 
-  if(name == "bob" && pass == "doge"){
-    var text = $("#userStuff").html()
+        console.log(response);
+        console.log(response.success);
 
-    $('#loginInfo').html("");
-    $('#loginInfo').append(text);
-    
-  }
-  else{
-    alert("loser!");
-  }
-  
+        if(response.success) {
+          
+          $('#loginInfo').html("");
+          $('#loginInfo').append(text);
+        }
+        else {
+          alert("Too Bad");
+        }
+      });
+
+  $.get("http://crossoverdev.parseapp.com/tab/pNC0bR2ju7" , function( data ) {
+  alert( "Data Loaded: " + data );
+});
   });
 
 $('#loginInfo').on('click', '#openTab', function() {
