@@ -15,7 +15,9 @@ body{
 }
 
 #loginInfo{
-	display:none;
+	/*
+        display:none;
+    */
 	margin-left: 80px;
 }
 
@@ -24,6 +26,9 @@ body{
 	margin-top: -50px;
 }
 
+#openTab{
+    display:none;
+}
 
 /*
 	custom css for popup buttons, might be too front heavy for actual use 
