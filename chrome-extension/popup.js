@@ -121,7 +121,14 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 **/
+
+var doge = "";
+var cat = " this is a  string : www.reddit.com";
+var geturl = new RegExp("(http|ftp|https|www)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?", "g");
+
+
 var userTabs = ['http://reddit.com', 'http://google.com', 'http://pcpartpicker.com/'];
+
 $('#openTab').click( function() {
     //window.open('http://www.google.com','GoogleWindow', 'width=800, height=600');
     for(i=0; i < userTabs.length; i++){
@@ -148,8 +155,8 @@ $('#loginInfo').on('click', '#subButton', function() {
         password: pass
       }, function(response) {
 
-        console.log(response);
-        console.log(response.success);
+        //alert(response);
+        //alert(response.success);
 
         if(response.success) {
           
@@ -161,9 +168,19 @@ $('#loginInfo').on('click', '#subButton', function() {
         }
       });
 
-  $.get("http://crossoverdev.parseapp.com/tab/pNC0bR2ju7" , function( data ) {
-  alert( "Data Loaded: " + data );
+  $.get("http://crossoverdev.parseapp.com/getTabs" ,  function(data) {
+        
+        doge = JSON.stringify(data);
+        //alert(typeof doge);
+        alert(doge);
+       // doge = JSON.stringify(data);
+       
+       alert(cat.match(geturl));
+               
 });
+
+
+  
   });
 
 $('#loginInfo').on('click', '#openTab', function() {
