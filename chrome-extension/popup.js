@@ -121,6 +121,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 **/
+
+var doge = "";
+var cat = " this is a  string : www.reddit.com";
+var geturl = new RegExp("(http|ftp|https|www)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?", "g");
+
+
 var userTabs = ['http://reddit.com', 'http://google.com', 'http://pcpartpicker.com/'];
 var userTabs2 = ['https://www.youtube.com/', 'http://gmail.com', 'http://yahoo.com'];
 var userTabs3 = ['http://memebase.com', 'http://http://www.w3schools.com/', 'http://slack.com'];
@@ -217,6 +223,7 @@ function loadTabGroups(){
     bkg.console.log(document);
 }
 
+<<<<<<< HEAD
 function removeTabGroups(){
     var inputDiv = document.querySelector('#tabGroupList');
     //var tGButtons = inputDiv.getElementsByClassName('tabGroup');
@@ -236,6 +243,10 @@ function removeTabGroups(){
     inputDiv.removeChild(tGBDiv);
     bkg.console.log("bye");
 }
+=======
+        //alert(response);
+        //alert(response.success);
+>>>>>>> origin/master
 
 //$('.tabGroup').click( function(event){
     //event.target gets the element
@@ -316,6 +327,7 @@ function removeTabButttons(){
 });*/
 
 
+<<<<<<< HEAD
 //tabGroupList
 $('.tabGroupList').click(function(event){
     bkg.console.log("clicked");
@@ -334,6 +346,22 @@ $('.tabGroupList').click(function(event){
         alert(event.target.getAttribute("class") + "not a correct button");
     }
 });
+=======
+  $.get("http://crossoverdev.parseapp.com/getTabs" ,  function(data) {
+        
+        doge = JSON.stringify(data);
+        //alert(typeof doge);
+        alert(doge);
+       // doge = JSON.stringify(data);
+       
+       alert(cat.match(geturl));
+               
+});
+
+
+  
+  });
+>>>>>>> origin/master
 
 /*for(i=0; i< document.getElementById('tab).length; i++){
     if(document.getElementsByClassName('tab')[i].onclick=function(){
