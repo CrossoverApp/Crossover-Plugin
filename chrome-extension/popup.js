@@ -173,11 +173,11 @@ var bkg = chrome.extension.getBackgroundPage();
 document.addEventListener('DOMContentLoaded', function() {
     bkg.console.log("Start");
     //if(){ //doesn't have session token
-        loadLogin();
+        //loadLogin();
     //}else if(){ //does have session token
-        bkg.console.log("Middle");
+        //bkg.console.log("Middle");
         loadTabGroups();
-        removeLogin();
+        //removeLogin();
     //}else{ //error
         //error code here
     //}
@@ -223,7 +223,6 @@ function loadTabGroups(){
     bkg.console.log(document);
 }
 
-<<<<<<< HEAD
 function removeTabGroups(){
     var inputDiv = document.querySelector('#tabGroupList');
     //var tGButtons = inputDiv.getElementsByClassName('tabGroup');
@@ -243,10 +242,6 @@ function removeTabGroups(){
     inputDiv.removeChild(tGBDiv);
     bkg.console.log("bye");
 }
-=======
-        //alert(response);
-        //alert(response.success);
->>>>>>> origin/master
 
 //$('.tabGroup').click( function(event){
     //event.target gets the element
@@ -327,7 +322,6 @@ function removeTabButttons(){
 });*/
 
 
-<<<<<<< HEAD
 //tabGroupList
 $('.tabGroupList').click(function(event){
     bkg.console.log("clicked");
@@ -346,22 +340,6 @@ $('.tabGroupList').click(function(event){
         alert(event.target.getAttribute("class") + "not a correct button");
     }
 });
-=======
-  $.get("http://crossoverdev.parseapp.com/getTabs" ,  function(data) {
-        
-        doge = JSON.stringify(data);
-        //alert(typeof doge);
-        alert(doge);
-       // doge = JSON.stringify(data);
-       
-       alert(cat.match(geturl));
-               
-});
-
-
-  
-  });
->>>>>>> origin/master
 
 /*for(i=0; i< document.getElementById('tab).length; i++){
     if(document.getElementsByClassName('tab')[i].onclick=function(){
