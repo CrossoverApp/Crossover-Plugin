@@ -136,6 +136,9 @@ $('#openTab').click( function() {
 });
 
 $('#logIn').click( function() {
+  var text = $("#loginStuff").html()
+  
+   $('#loginInfo').append(text);
    $('#loginInfo').toggle("show");
 });
 
