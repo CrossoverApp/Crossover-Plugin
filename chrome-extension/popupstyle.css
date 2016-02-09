@@ -19,22 +19,22 @@ body{
 }
 
 #loginInfo{
-	/*
-        display:none;
-    */
+	display:none;
 	margin-left: 80px;
 }
 
 #subButton{
 	margin-left: 3px;
 	margin-top: -50px;
-
 }
 
-#openTab{
-    display:none;
+#backUserStuff{
+	margin-left: 80px;
 }
 
+.tabGroupButtons{
+	margin-left: 80px;
+}
 /*
 	custom css for popup buttons, might be too front heavy for actual use 
 	but fine for right now
