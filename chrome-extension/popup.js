@@ -15,6 +15,26 @@ var textTGL = '{"tabGroups":[{"id":"Acji5m8nYc","title":"Group 1"},{"id":"s5s17T
 var JsonTGL = JSON.parse(textTGL);
 
 
+function bgcl(string){
+    chrome.extension.getBackgroundPage().console.log(string);
+}
+var bkg = chrome.extension.getBackgroundPage();
+
+document.addEventListener('DOMContentLoaded', function() {
+    bkg.console.log("Start");
+    //if(){ //doesn't have session token
+        //loadLogin();
+    //}else if(){ //does have session token
+        //bkg.console.log("Middle");
+        loadTabGroups();
+        //removeLogin();
+    //}else{ //error
+        //error code here
+    //}
+    bkg.console.log("End");
+});
+
+
 
 
 $('#logIn').click( function() {
