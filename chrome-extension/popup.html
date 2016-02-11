@@ -60,8 +60,18 @@
             <p id="titleForTGs">List of Tab Groups</p>
             <div id="tabsList"></div>
             <div id="listHolding"></div>
-            <input type="button" class="popButton" id="backUserStuff" value="Back"/>  
+            <input type="button" class="popButton" id="backUserStuff" value="Back"/> 
+            <input type="button" class="popButton" id="addView" value="Add Tab"/> 
     </template>
+
+    <template id='addTabView'>
+      <p>Add a tab</p>
+      <input type='text' id="tabTITLE" placeholder="Title"/>
+      <input type='text' id = 'tabURL' placeholder="URL"/>
+      <input type='text' id = 'tabGROUP' placeholder="Tab Group"/>
+      <input type="button" class="popButton" id="addTab" value="Add it!"/>
+    </template>
+
   </body>
 </html>
 
