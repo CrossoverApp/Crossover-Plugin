@@ -36,9 +36,9 @@
   <body>
     <div id="displayBody">
       <p id="greeting">Crossover bebeh!</p>
-      <!--div id="landingPage">
-      <input type="button" class="popButton" id="logIn" value="LogIn"/>
-    </div-->
+      <div id="landingPage">
+      <!-- <input type="button" class="popButton" id="logIn" value="LogIn"/> -->
+    </div>
     </div>
 
     <!-- hidden by default will recieve templates -->
@@ -58,22 +58,19 @@
 
     <template id="tabGroups">
             <p id="titleForTGs">List of Tab Groups</p>
-            <input type="button" class="popButton" id="addView" value="Add Tab"/>
             <div id="tabsList"></div>
-            <div id="listHolding"></div> 
-    </template>
-    <template id="Buttons">
-        <input type="button" class="popButton" id="backUserStuff" value="Back"/>
-        <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
-        <input type="button" class="popButton" id="GroupButton" value=""/>
-        <input type="button" class="popButton" id="TabButton" value="" href="" data-group=""/>
+            <div id="listHolding"></div>
+            <input type="button" class="popButton" id="backUserStuff" value="Back"/> 
+            <input type="button" class="popButton" id="addView" value="Add Tab"/> 
     </template>
 
     <template id='addTabView'>
       <p>Add a tab</p>
       <input type='text' id="tabTITLE" placeholder="Title"/>
       <input type='text' id = 'tabURL' placeholder="URL"/>
-      <input type='text' id = 'tabGROUP' placeholder="Tab Group"/>
+      <!-- <input type='text' id = 'tabGROUP' placeholder="Tab Group"/> -->
+      <select id = "tabGROUP">
+      </select>
       <input type="button" class="popButton" id="addTab" value="Add it!"/>
     </template>
 

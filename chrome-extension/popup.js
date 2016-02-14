@@ -18,6 +18,10 @@ var JsonTGL = JSON.parse(textTGL);
 var textTbL;
 var JsonTbL;
 
+// these two arrays hold the user tab group names and their ID's we use these in the addTab functions to make calls
+var dogeID = [];
+var dataID = [];
+
 var bkg = chrome.extension.getBackgroundPage();
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -38,21 +42,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function getTabGroupInfo(){
     //bkg.console.log("Hello");
-    $.get("http://crossoverdev.parseapp.com/getTabGroups" ,  function(data) {
-        bkg.console.log("Got here");
-        //if(response.success) {
-            //bkg.console.log("Hey I am working");
-            //doge = data.tabs;
-            doge = data;
-            bkg.console.log(doge);
-            bkg.console.log(doge.tabGroups);
-            //alert(doge[0].url);
-            //alert(doge);  
-        //} else {
-            bkg.console.log("getTabGroupTabs Failed");
-        //}
-           
-    });  
+      $.get("http://crossoverdev.parseapp.com/getTabGroups" ,  function(data) {
+        doge = data;
+
+        //alert(doge.tabGroups[0].title); 
+        //alert(doge.tabGroups.length);    
+        //doge = data.tabGroups;
+        //alert(doge[0].url);
+        // we can use a for loop now to catch all of the urls and names!   
+        for(i=0; i < doge.tabGroups.length; i++){
+        //alert(doge.tabGroups[1].title);
+        dogeID.push(doge.tabGroups[i].title);
+        dataID.push(doge.tabGroups[i].id);
+        }
+        //alert(dogeID);
+      });
     bkg.console.log("Bye");
 }
 
@@ -263,10 +267,34 @@ $('#loginInfo').on('click', '#TabButton', function() {
 // adds a new tab/ tab group. I think I need to add the group, then make a get to 
 // see what the group ID is then I can make another post request to add the tab to the group.
 $('#loginInfo').on('click', '#addTab', function() {
-  var tabGroup = $("#tabGROUP").val();
-  //var url = $("#pass").val(); 
-  //var group = $("#name").val();
-  
+  var groupId = $("#tabGROUP").val();
+  var taburl = $("#tabURL").val(); 
+  var tabtitle = $("#tabTITLE").val();
+
+  var tab = {
+            title: tabtitle,
+            url: taburl
+          }
+  var newTab = [tab];
+
+  if(groupId == "newGroup"){
+    alert("new group");
+  }
+  else{
+    $.post("http://crossoverdev.parseapp.com/newTabs", {
+        newTabs: newTab,
+        tabGroup: groupId
+      }, function(response) {
+        if(response.success) {
+         alert("You made a new tab!");
+        }
+        else {
+          alert("There was an error!");
+        }
+      });
+  }
+
+  /*
   $.post("http://crossoverdev.parseapp.com/newTabGroup", {
         title: tabGroup
       }, function(response) {
@@ -281,9 +309,10 @@ $('#loginInfo').on('click', '#addTab', function() {
           alert("There was an error!");
         }
       });
+
+  */
   
   });
-
 
 
 //clears the viewing area of its contents
@@ -295,9 +324,17 @@ function clearHTML(){
 function injectAddTabs(){
   var text = $("#addTabView").html();
   $('#loginInfo').html("");
-  $('#loginInfo').append(text); 
-}
+  $('#loginInfo').append(text);
 
+  for(i=0; i < dogeID.length + 1; i++){
+    if(i == 0){
+      //$('#tabGROUP').append("<option value='newGroup'>Add a new group</option>");
+    }
+    else{
+      $('#tabGROUP').append("<option value="+ dataID[i-1] +"'>"+dogeID[i-1]+"</option>");
+    }
+     }  
+}
 /*function getUserGroups(){
   $.post("http://crossoverdev.parseapp.com/getTabGroups", {
         user: "fake@gmail.com"
