@@ -18,14 +18,18 @@ var JsonTGL = JSON.parse(textTGL);
 var textTbL;
 var JsonTbL;
 
+var allTabs;
+
 // these two arrays hold the user tab group names and their ID's we use these in the addTab functions to make calls
 var dogeID = [];
 var dataID = [];
 
+var openSome = false;
+
 var bkg = chrome.extension.getBackgroundPage();
 
 document.addEventListener('DOMContentLoaded', function() {
-    bkg.console.log("Start");
+    //bkg.console.log("Start");
     //if(){ //doesn't have session token
         loadLogin();
     //}else if(){ //does have session token
@@ -37,10 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
     //}
     var template = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
     $('#tabsList').append(template);
-    bkg.console.log("End");
+    //bkg.console.log("End");
 });
 
-function getTabGroupInfo(){
+/*function getTabGroupInfo(){
     //bkg.console.log("Hello");
       $.get("http://crossoverdev.parseapp.com/getTabGroups" ,  function(data) {
         doge = data;
@@ -58,17 +62,75 @@ function getTabGroupInfo(){
         //alert(dogeID);
       });
     bkg.console.log("Bye");
+}*/
+
+function getTabGroupInfo(){
+    //bkg.console.log("Hello");
+    var temp;
+    $.ajax({
+        async: false,
+        type: 'GET',
+        url: 'http://crossoverdev.parseapp.com/getTabGroups',
+        success: function(data) {
+            //bkg.console.log("Made it");
+            temp = data;
+            JsonTGL = temp.tabGroups;
+            for(i=0; i < doge.tabGroups.length; i++){
+                //alert(doge.tabGroups[1].title);
+                dogeID.push(doge.tabGroups[i].title);
+                dataID.push(doge.tabGroups[i].id);
+            }
+        },
+        error: function(){
+            bkg.console.log("failed to load tab groups");
+        }
+    });
+    //bkg.console.log("Bye");
+}
+
+function getTabsInfo(tabGroupTitle){
+    var temp;
+    $.ajax({
+        async: false,
+        type: 'GET',
+        url: 'http://crossoverdev.parseapp.com/getTabGroupTabs',
+        success: function(data) {
+            //bkg.console.log("Made it2");
+            temp = data;
+            JsonTbL = temp.tabs;
+            bkg.console.log(temp.tabs);
+        },
+        error: function(data){
+            //bkg.console.log(data.message);
+        },
+        data: {
+            tabGroup: tabGroupTitle
+        }
+    });
 }
 
 function loadLogin(){
     var text = $("#loginStuff").html()
     $('#loginInfo').append(text);
+    var title = document.querySelector('#Titles').content.querySelector('#greeting').cloneNode(true);
+    $('#displayBody').append(title);
 }
 
 function loadTabGroups(){
     //bkg.console.log("Working3");
     var groupNum = userGroups.length;
+    
+    
+    
+    $('#displayBody').html('');
+    var title =  document.querySelector('#Titles').content.querySelector('#titleForTGs').cloneNode(true);
+    $('#displayBody').append(title);
 
+    
+    $('#optionBar').html('');
+    var addAll = document.querySelector('#Buttons').content.querySelector('#addSaveAllTabs').cloneNode(true);
+    $('#optionBar').append(addAll);
+    
     $('#tabsList').html('');
     
     var backButton = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
@@ -76,12 +138,15 @@ function loadTabGroups(){
     
     //$('#tabsList').append("<br>");
     
-    var tGList = JsonTGL.tabGroups;
+    var tGList = JsonTGL;//.tabGroups;
     //bkg.console.log("loop");
-    for(i=0; i < groupNum; i++){
+    //bkg.console.log(tGList.length);
+    for(i=0; i < tGList.length; i++){
+        bkg.console.log(tGList[i]);
         var template = document.querySelector('#Buttons').content.querySelector('#GroupButton').cloneNode(true);
         //bkg.console.log(template);
         template.value = tGList[i].title;
+        template.dataset.id = tGList[i].id;
         $('#tabsList').append(template);
         $('#tabsList').append("<br>");
         //$('#tabsList').append("<br>");
@@ -91,13 +156,18 @@ function loadTabGroups(){
 
 function loadTabButtons(groupButton){
     //bkg.console.log("LTB");
-    
-    
     $('#tabsList').html('');
     var inputTabs;
     var group = groupButton.value;
+    
+    $('#displayBody').html('');
+    var title =  document.querySelector('#Titles').content.querySelector('#TabGroupTitle').cloneNode(true);
+    title.innerHTML = group;
+    $('#displayBody').append(title);
+    
+    
     //bkg.console.log(group);
-    if(group === "Group 1"){
+    /*if(group === "Group 1"){
         inputTabs = userTabs;
     } else if(group === "Group 2"){
         inputTabs = userTabs2;
@@ -105,18 +175,28 @@ function loadTabButtons(groupButton){
         inputTabs = userTabs3;
     } else {
         inputTabs = [];
-    }
+    }*/
+    getTabsInfo(groupButton.dataset.id);
+    inputTabs = JsonTbL;
     
+    $('#optionBar').html('');
     var backButton = document.querySelector('#Buttons').content.querySelector('#backGroupStuff').cloneNode(true);
-    $('#tabsList').append(backButton);
+    $('#optionBar').append(backButton);
+    var AddButton = document.querySelector('#Buttons').content.querySelector('#addView').cloneNode(true);
+    $('#optionBar').append(AddButton);
+    var openAllButton = document.querySelector('#Buttons').content.querySelector('#OpenAll').cloneNode(true);
+    openAllButton.dataset.group = group;
+    $('#optionBar').append(openAllButton);
+    var openSomeButton = document.querySelector('#Buttons').content.querySelector('#OpenSome').cloneNode(true);
+    $('#optionBar').append(openSomeButton);
     
-    $('#tabsList').append("<br>");
+    $('#optionBar').append("<br>");
     
     for (i=0; i<inputTabs.length; i++){//tab in userTabs){
         var template = document.querySelector('#Buttons').content.querySelector('#TabButton').cloneNode(true);
         
-        template.value=inputTabs[i];
-        template.setAttribute("href",inputTabs[i]);
+        template.value=inputTabs[i].title;
+        template.setAttribute("href",inputTabs[i].url);
         template.dataset.group = group;
         //bkg.console.log(template);
         
@@ -129,6 +209,39 @@ function openSpecificTab(tab){
     chrome.tabs.create({"url":tab.getAttribute("href")});
 }
 
+function openAllInCurrentGroup(){
+    for(var j=0; j<JsonTbL.length; j++){
+        chrome.tabs.create({"url":JsonTbL[j].url});
+    }
+}
+
+function loadSaveAllTabView(){
+    var text = $("#saveAllTabView").html();
+    $('#loginInfo').html("");
+    $('#loginInfo').append(text);
+    fillGroupDropDown();
+}
+
+function getAllTabs(){
+    allTabs = [];
+    chrome.tabs.query({currentWindow: true}, function(tabs) {
+        //var activeTab = tabs;
+        //bkg.console.log(tabs.length);
+        for(var i =0; i < tabs.length; i++){
+            //url.push(tabs[i].url);
+            allTabs.push({
+                title: tabs[i].title,
+                url: tabs[i].url
+            });
+        }
+        for(var i=0; i<allTabs.length; i++){
+            bkg.console.log(allTabs[i].title + " " + allTabs[i].url);
+        }
+        chrome.runtime.sendMessage({"message": "GotTabs"});
+    });
+}
+
+
 
 // login page, we also inject the user actions template here
 $('#loginInfo').on('click', '#subButton', function() {
@@ -136,6 +249,7 @@ $('#loginInfo').on('click', '#subButton', function() {
   var pass = $("#pass").val();
   var text = $("#tabGroups").html();
   //var text = $("#userStuff").html();
+  bkg.console.log("pressed submit");
   //fake@gmail.com 1234
   $.post("http://crossoverdev.parseapp.com/user", {
         email: name,
@@ -146,6 +260,7 @@ $('#loginInfo').on('click', '#subButton', function() {
         //alert(response.success);
 
         if(response.success) {
+          bkg.console.log("0");
           getTabGroupInfo();
           bkg.console.log("1");
           //$('#logIn').toggle("show");
@@ -247,6 +362,11 @@ $('#loginInfo').on('click', '#addView', function() {
   });
   
   $('#loginInfo').on('click', '#backGroupStuff', function() {
+    if($('#tabGROUP').length){
+        clearHTML();
+        var text = $("#tabGroups").html();
+        $('#loginInfo').append(text);
+    }
     loadTabGroups();
 });
 
@@ -261,9 +381,102 @@ $('#loginInfo').on('click', '#GroupButton', function() {
 $('#loginInfo').on('click', '#TabButton', function() {
     //bkg.console.log(this);
     //bkg.console.log("Press");
-    openSpecificTab(this);
+    if(openSome){
+        if(this.className === "popButton"){
+            this.className = "popButtonChecked";
+        } else if (this.className === "popButtonChecked") {
+            this.className = "popButton";
+        } else {
+            bkg.console.log("not correct class");
+        }
+    } else {
+        openSpecificTab(this);
+    }
 });
 
+$('#loginInfo').on('click', '#OpenSome', function(){
+    if(openSome){
+        var tabButtons = $('.popButtonChecked');
+        var tabLength = tabButtons.length;
+        for(var k = 0; k<tabLength; k++){
+            tabButtons[k].className = "popButton";
+        }
+        //bkg.console.log(tabButtons);
+        $('#OpenSelect').remove();
+    } else {
+        var selectButton = document.querySelector('#Buttons').content.querySelector('#OpenSelect').cloneNode(true);
+        $('#OpenSome').after(selectButton);
+    }
+    openSome = !openSome;
+    //bkg.console.log(openSome);
+});
+
+$('#loginInfo').on('click', '#OpenSelect', function(){
+    var tabButtons = $('.popButtonChecked');
+    var tabLength = tabButtons.length;
+    for(var b = 0; b<tabLength; b++){
+        chrome.tabs.create({"url":tabButtons[b].getAttribute("href")});
+    }
+});
+
+$('#loginInfo').on('click', '#addSaveAllTabs', function(){
+    clearHTML();
+    loadSaveAllTabView();
+});
+
+$('#loginInfo').on('click', '#saveAllTabs', function(){
+    getAllTabs();
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+            if( request.message === "GotTabs" ) {
+                bkg.console.log("I got tabs");
+                addTabBunch();
+            }
+        }
+    );
+    
+});
+function addTabBunch(){
+    var groupId = $("#tabGROUP").val();
+    bkg.console.log(allTabs.length);
+    for(var i=0; i<allTabs.length; i++){
+        bkg.console.log(allTabs[i].title + " " + allTabs[i].url);
+    }
+    for(var i=0; i<allTabs.length; i++){
+        var putTab = [allTabs[i]];
+        bkg.console.log("Loading: " +i);
+        /*$.post("http://crossoverdev.parseapp.com/newTabs", {
+            newTabs: allTabs[i],
+            tabGroup: groupId
+        }, function(response) {
+            if(response.success) {
+                bkg.console.log("You made a new tab!");
+                clearHTML();
+                injectAddTabs();
+            } else {
+                alert("There was an error!");
+            }
+        });*/
+        $.ajax({
+            async: false,
+            type: 'POST',
+            url: 'http://crossoverdev.parseapp.com/newTabs',
+            success: function(data) {
+                bkg.console.log("You made a new tab!");
+                //clearHTML();
+                //injectAddTabs();
+            },
+            error: function(data){
+                alert(data.message);
+            },
+            data: {
+                newTabs: putTab,
+                tabGroup: groupId
+            }
+        });
+    }
+    bkg.console.log("Made it to save all tabs button");
+}
 // adds a new tab/ tab group. I think I need to add the group, then make a get to 
 // see what the group ID is then I can make another post request to add the tab to the group.
 $('#loginInfo').on('click', '#addTab', function() {
@@ -287,6 +500,8 @@ $('#loginInfo').on('click', '#addTab', function() {
       }, function(response) {
         if(response.success) {
          alert("You made a new tab!");
+         clearHTML();
+         injectAddTabs();
         }
         else {
           alert("There was an error!");
@@ -325,15 +540,29 @@ function injectAddTabs(){
   var text = $("#addTabView").html();
   $('#loginInfo').html("");
   $('#loginInfo').append(text);
+  
+  fillGroupDropDown();
+}
 
-  for(i=0; i < dogeID.length + 1; i++){
+function fillGroupDropDown(){
+  var addOption;
+  //bkg.console.log(dogeID.length);
+  bkg.console.log("AddTab");
+  bkg.console.log(JsonTGL.length);
+  for(i=0; i < JsonTGL.length + 1; i++){
     if(i == 0){
       //$('#tabGROUP').append("<option value='newGroup'>Add a new group</option>");
     }
     else{
-      $('#tabGROUP').append("<option value="+ dataID[i-1] +"'>"+dogeID[i-1]+"</option>");
+      addOption = document.querySelector('#Misc').content.querySelector('#addTabOption').cloneNode(true);
+      addOption.value = JsonTGL[i-1].id;
+      addOption.innerHTML = JsonTGL[i-1].title;
+      bkg.console.log(document);
+      bkg.console.log(addOption);
+      $('#tabGROUP').append(addOption);
+      //$('#tabGROUP').append("<option value="+ dataID[i-1] +"'>"+dogeID[i-1]+"</option>");
     }
-     }  
+   }
 }
 /*function getUserGroups(){
   $.post("http://crossoverdev.parseapp.com/getTabGroups", {
