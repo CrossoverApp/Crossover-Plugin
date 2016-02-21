@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Doge extension",
-  "description": "Who doesnt want some freaking doge?",
+  "description": "Crossover, the best way to share tabs",
   "version": "0.1",
   "content_scripts": [
   {

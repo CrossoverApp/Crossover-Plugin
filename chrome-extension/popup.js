@@ -129,7 +129,10 @@ function loadTabGroups(){
     
     $('#optionBar').html('');
     var addAll = document.querySelector('#Buttons').content.querySelector('#addSaveAllTabs').cloneNode(true);
+    var addGrp = document.querySelector('#Buttons').content.querySelector('#addNewGroup').cloneNode(true);
+
     $('#optionBar').append(addAll);
+    $('#optionBar').append(addGrp);
     
     $('#tabsList').html('');
     
@@ -356,11 +359,15 @@ $('#loginInfo').on('click', '.tabGroupButton', function() {
   });*/
 
 
+
+//Injects the add a tab view which lets the user add new tabs to a selected group
 $('#loginInfo').on('click', '#addView', function() {
     clearHTML();
     injectAddTabs();
   });
-  
+
+
+//Logic for the back button that returns user to the list of tab groups  
   $('#loginInfo').on('click', '#backGroupStuff', function() {
     if($('#tabGROUP').length){
         clearHTML();
@@ -370,14 +377,14 @@ $('#loginInfo').on('click', '#addView', function() {
     loadTabGroups();
 });
 
+
+//Loads the tabs inside of a selected group
 $('#loginInfo').on('click', '#GroupButton', function() {
-    //bkg.console.log(this);
-    //bkg.console.log("Press");
-    
-    
     loadTabButtons(this);
 });
 
+
+// lets the user select a tabs to be opend from a tab group
 $('#loginInfo').on('click', '#TabButton', function() {
     //bkg.console.log(this);
     //bkg.console.log("Press");
@@ -394,6 +401,8 @@ $('#loginInfo').on('click', '#TabButton', function() {
     }
 });
 
+
+//This changes the class of the tab button, if changed we select multiple tabs to be opened.
 $('#loginInfo').on('click', '#OpenSome', function(){
     if(openSome){
         var tabButtons = $('.popButtonChecked');
@@ -411,6 +420,8 @@ $('#loginInfo').on('click', '#OpenSome', function(){
     //bkg.console.log(openSome);
 });
 
+
+//Opens the selected tabs from the above function
 $('#loginInfo').on('click', '#OpenSelect', function(){
     var tabButtons = $('.popButtonChecked');
     var tabLength = tabButtons.length;
@@ -419,6 +430,8 @@ $('#loginInfo').on('click', '#OpenSelect', function(){
     }
 });
 
+
+//Saves all current open tabs
 $('#loginInfo').on('click', '#addSaveAllTabs', function(){
     clearHTML();
     loadSaveAllTabView();
@@ -477,6 +490,8 @@ function addTabBunch(){
     }
     bkg.console.log("Made it to save all tabs button");
 }
+
+
 // adds a new tab/ tab group. I think I need to add the group, then make a get to 
 // see what the group ID is then I can make another post request to add the tab to the group.
 $('#loginInfo').on('click', '#addTab', function() {
@@ -507,16 +522,29 @@ $('#loginInfo').on('click', '#addTab', function() {
           alert("There was an error!");
         }
       });
-  }
+  }  
+  });
 
-  /*
-  $.post("http://crossoverdev.parseapp.com/newTabGroup", {
-        title: tabGroup
+
+
+//Injects the add group view, here the user can create new tab groups for their  profile
+//Turn this into a function later.
+$('#loginInfo').on('click', '#addNewGroup', function() {
+    var text = $("#addGroupView").html();
+    clearHTML();
+    $('#loginInfo').append(text);
+    var addBack = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
+    $('#loginInfo').append(addBack);
+  });
+
+
+// Lets the user create a new tab group for their profile
+$('#loginInfo').on('click', '#addGRP', function() {
+    var groupName = $("#groupTITLE").val();
+
+    $.post("http://crossoverdev.parseapp.com/newTabGroup", {
+        title: groupName
       }, function(response) {
-
-        //alert(response);
-        //alert(response.success);
-
         if(response.success) {
          alert("You made a new tab Group");
         }
@@ -524,11 +552,19 @@ $('#loginInfo').on('click', '#addTab', function() {
           alert("There was an error!");
         }
       });
-
-  */
-  
   });
 
+
+//Logic for the back buttion in the addGroupView
+$('#loginInfo').on('click', '#backUserStuff', function() {
+  var text = $("#tabGroups").html();
+  dogeID = [];
+  dataID = [];
+  clearHTML();
+  getTabGroupInfo();
+  $('#loginInfo').append(text);
+  loadTabGroups();
+  });
 
 //clears the viewing area of its contents
 function clearHTML(){
@@ -580,4 +616,3 @@ function fillGroupDropDown(){
         }
       });
 }*/
-
