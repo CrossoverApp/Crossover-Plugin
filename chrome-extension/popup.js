@@ -1,9 +1,5 @@
-
 var doge;
-
 //var geturl = new RegExp("(http|ftp|https|www)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?", "g");
-
-
 var userTabs = ['http://reddit.com', 'http://google.com', 'http://pcpartpicker.com/'];
 var userTabs2 = ['https://www.youtube.com/', 'http://gmail.com', 'http://yahoo.com'];
 var userTabs3 = ['http://memebase.com', 'http://http://www.w3schools.com/', 'http://slack.com'];
@@ -28,41 +24,95 @@ var openSome = false;
 
 var bkg = chrome.extension.getBackgroundPage();
 
+  function ChromeStorageController(){
+        var store = {};//Object.create(null);
+        store.async = 1;
+        store.getItemAsync = function(path){
+            var get = new Parse.Promise()
+            chrome.storage.local.get(path,function(data){
+                    //careful here: get return a key,value pair but we only need the value
+                    get.resolve(data[path]);
+            });
+            return get;
+        };
+        store.setItemAsync = function(path,value){
+            var set = new Parse.Promise()
+            var item = Object.create(null);
+            item[path] = value;
+            chrome.storage.local.set(item, function(err){
+                if(err){
+                    set.reject(err);
+                }else{
+                    set.resolve(value);
+                }
+            });
+            return set;
+        };
+        store.removeItemAsync = function(path){
+            var remove = new Parse.Promise()
+            chrome.storage.local.remove(path,function(err){
+                if(err){
+                    remove.reject(err);
+                }else{
+                    remove.resolve();
+                }
+            })
+            return remove;
+        };
+        store.clear = function(){
+            chrome.storage.local.clear();
+        };
+        return store;
+    }
+
 document.addEventListener('DOMContentLoaded', function() {
-    //bkg.console.log("Start");
-    //if(){ //doesn't have session token
-        loadLogin();
-    //}else if(){ //does have session token
-        //bkg.console.log("Middle");
-        //loadTabGroups();
-        //removeLogin();
-    //}else{ //error
-        //error code here
-    //}
+  /*
+  if(!get_cookie()){
+    loadLogin();
     var template = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
     $('#tabsList').append(template);
-    //bkg.console.log("End");
+  }
+  else{
+    var text = $("#addTabView").html();
+    clearHTML();
+    $('#loginInfo').append(text);
+    
+  }
+  */
+  
+  Parse.CoreManager.setStorageController(ChromeStorageController());
+  Parse.initialize("PNH3PccfMRTmWXoQxIQ5ikeegABPaxGmUXugzlKw",
+                   "6s9M1c6xVc50CjRerU2RMLhZjODxcTzXqyKFW5Hl");
+  loadLogin();
+    var template = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
+    $('#tabsList').append(template);
 });
 
-/*function getTabGroupInfo(){
-    //bkg.console.log("Hello");
-      $.get("http://crossoverdev.parseapp.com/getTabGroups" ,  function(data) {
-        doge = data;
+// sets a cookie that takes variable min that sets cookie to expire after min minutes
+function set_cookie(min) {
+    var now = new Date();
+    var exp = new Date(now.getTime() + min*60*1000);
+    var status = '';
+    document.cookie = 'ExpirationCookieTest=1; expires='+exp.toUTCString();
+    if (document.cookie && document.cookie.indexOf('ExpirationCookieTest=1') != -1) {
+        alert('Cookie successfully set. Expiration in '+min+' minutes');
 
-        //alert(doge.tabGroups[0].title); 
-        //alert(doge.tabGroups.length);    
-        //doge = data.tabGroups;
-        //alert(doge[0].url);
-        // we can use a for loop now to catch all of the urls and names!   
-        for(i=0; i < doge.tabGroups.length; i++){
-        //alert(doge.tabGroups[1].title);
-        dogeID.push(doge.tabGroups[i].title);
-        dataID.push(doge.tabGroups[i].id);
-        }
-        //alert(dogeID);
-      });
-    bkg.console.log("Bye");
-}*/
+    } else {
+        alert('Cookie NOT set. Please make sure your browser is accepting cookies');
+    }
+
+    
+}
+
+// checkes if extension cookie exists, if so returns True, else returns false
+function get_cookie() {
+    if (document.cookie && document.cookie.indexOf('ExpirationCookieTest=1') != -1) {
+        return true
+    } else {
+        return false
+    }  
+}
+
 
 function getTabGroupInfo(){
     //bkg.console.log("Hello");
@@ -111,6 +161,7 @@ function getTabsInfo(tabGroupTitle){
 
 function loadLogin(){
     var text = $("#loginStuff").html()
+    clearHTML();
     $('#loginInfo').append(text);
     var title = document.querySelector('#Titles').content.querySelector('#greeting').cloneNode(true);
     $('#displayBody').append(title);
@@ -130,9 +181,11 @@ function loadTabGroups(){
     $('#optionBar').html('');
     var addAll = document.querySelector('#Buttons').content.querySelector('#addSaveAllTabs').cloneNode(true);
     var addGrp = document.querySelector('#Buttons').content.querySelector('#addNewGroup').cloneNode(true);
+    var addTab = document.querySelector('#Buttons').content.querySelector('#addView').cloneNode(true);
 
     $('#optionBar').append(addAll);
     $('#optionBar').append(addGrp);
+    $('#optionBar').append(addTab);
     
     $('#tabsList').html('');
     
@@ -168,17 +221,7 @@ function loadTabButtons(groupButton){
     title.innerHTML = group;
     $('#displayBody').append(title);
     
-    
-    //bkg.console.log(group);
-    /*if(group === "Group 1"){
-        inputTabs = userTabs;
-    } else if(group === "Group 2"){
-        inputTabs = userTabs2;
-    } else if(group === "Group 3"){
-        inputTabs = userTabs3;
-    } else {
-        inputTabs = [];
-    }*/
+
     getTabsInfo(groupButton.dataset.id);
     inputTabs = JsonTbL;
     
@@ -259,81 +302,40 @@ $('#loginInfo').on('click', '#subButton', function() {
         password: pass
       }, function(response) {
 
-        //alert(response);
-        //alert(response.success);
 
         if(response.success) {
           bkg.console.log("0");
           getTabGroupInfo();
           bkg.console.log("1");
           //$('#logIn').toggle("show");
+          //$('#loginInfo').toggle("show");
           $('#loginInfo').html("");
           bkg.console.log("2");
           $('#loginInfo').append(text);
           bkg.console.log("3");
-          
+    
           bkg.console.log("4");
           loadTabGroups();
           bkg.console.log("5");
+
+          //set_cookie(1);
+          
+          
         }
         else {
           alert("Too Bad");
         }
       });
-
-    //try getTabGroup, used to be getTabs
-  /*  
-  $.get("http://crossoverdev.parseapp.com/getTabs" ,  function(data) {
-        doge = data.tabs;
-        //doge = data.tabGroups;
-        //alert(doge[0].url);
-        // we can use a for loop now to catch all of the urls and names!   
-      });  
-  */
-    
-  /*$.get("http://crossoverdev.parseapp.com/getTabGroups" ,  function(data) {
-        doge = data;
-        alert(doge.tabGroups[1].title);
-        //doge = data.tabGroups;
-        //alert(doge[0].url);
-        // we can use a for loop now to catch all of the urls and names!   
-      });*/ 
-
-
   });
 
 
 // loads the tab groups template into the extension
 $('#loginInfo').on('click', '#openGroups', function() {
-     //bkg.console.log("Working1");
-     
     var groups = $("#tabGroups").html();
     $('#loginInfo').html("");
     $('#loginInfo').append(groups);
     loadTabGroups();
-     //bkg.console.log("Working2");
-     
-     /*var groups = $("#tabGroups").html();
-     var groupNum = userGroups.length;
 
-     $('#loginInfo').html("");
-     $('#loginInfo').append(groups);
-     bkg.console.log("Here "+groupNum);
-     bkg.console.log(groups);
-     for(i=0; i < groupNum; i++){
-         /*bkg.console.log("Woah");
-         var gtButton = $("#Buttons").html();//.child("input.GroupButton").clone(true);
-         bkg.console.log(gtButton);
-         var maybehappens = $.parseHTML(gtButton);
-         bkg.console.log(maybehappens);
-         maybehappens.val("group"+(i+1));
-         bkg.console.log(maybehappens);
-         maybehappens.attr("id", "group"+(i+1));
-         bkg.console.log(maybehappens);
-         $('#tabList').append(maybehappens);
-         //
-         $('#tabsList').append("<input type='button' class='tabGroupButton popButton' id='group"+ i +"' value='group"+(i+1) +"'/>");
-     }*/ 
   });
 
 
@@ -344,19 +346,12 @@ $('#loginInfo').on('click', '.tabGroupButton', function() {
      $('#listHolding').html("");
 
      for(i=0; i < userGroups[idNum].length; i++ ){
-        //alert(userGroups[idNum][i]);
         $('#listHolding').append("<p> '"+userGroups[idNum][i] +"'</p>");
     } 
 
   });
 
-// On button click we reload contents of userStuff
-//Change to logout later
-/*$('#loginInfo').on('click', '#backUserStuff', function() {
-    var text = $("#userStuff").html();
-    $('#loginInfo').html("");
-    $('#loginInfo').append(text);
-  });*/
+
 
 
 
@@ -371,6 +366,7 @@ $('#loginInfo').on('click', '#addView', function() {
   $('#loginInfo').on('click', '#backGroupStuff', function() {
     if($('#tabGROUP').length){
         clearHTML();
+        getTabGroupInfo();
         var text = $("#tabGroups").html();
         $('#loginInfo').append(text);
     }
@@ -491,11 +487,25 @@ function addTabBunch(){
     bkg.console.log("Made it to save all tabs button");
 }
 
+// logic that shows or hides the custom group input in the addTabView
+$('#loginInfo').on('click', '#tabGROUP', function(){
+  var groupId = $("#tabGROUP").val();
+
+  if(groupId == "newGroup"){
+    $('#newTabGROUP').show();
+  }
+  else{
+     $('#newTabGROUP').hide();
+  }
+});
+
 
 // adds a new tab/ tab group. I think I need to add the group, then make a get to 
 // see what the group ID is then I can make another post request to add the tab to the group.
+
 $('#loginInfo').on('click', '#addTab', function() {
   var groupId = $("#tabGROUP").val();
+  var customID =  $('#newTabGROUP').val();
   var taburl = $("#tabURL").val(); 
   var tabtitle = $("#tabTITLE").val();
 
@@ -506,7 +516,40 @@ $('#loginInfo').on('click', '#addTab', function() {
   var newTab = [tab];
 
   if(groupId == "newGroup"){
-    alert("new group");
+    $.post("http://crossoverdev.parseapp.com/newTabGroup", {
+        title: customID
+      }, function(response) {
+        if(response.success) {
+         
+         $.get("http://crossoverdev.parseapp.com/getTabGroups" ,  function(data) {
+            doge = data;
+        
+            customID = doge.tabGroups[doge.tabGroups.length -1].id;
+          });
+
+         setTimeout(function(){
+            $.post("http://crossoverdev.parseapp.com/newTabs", {
+                newTabs: newTab,
+                tabGroup: customID
+                }, function(response) {
+                  if(response.success) {
+                      alert("You made a new tab!");
+                  }
+                  else {
+                      alert("shit is all fucked up!");
+                    }
+            });
+
+        }, 2000); //end here
+        clearHTML();
+        getTabGroupInfo();
+        injectAddTabs();
+        }
+        else {
+          alert("There was an error!");
+        }
+      });
+
   }
   else{
     $.post("http://crossoverdev.parseapp.com/newTabs", {
@@ -516,6 +559,7 @@ $('#loginInfo').on('click', '#addTab', function() {
         if(response.success) {
          alert("You made a new tab!");
          clearHTML();
+         getTabGroupInfo();
          injectAddTabs();
         }
         else {
@@ -553,6 +597,41 @@ $('#loginInfo').on('click', '#addGRP', function() {
         }
       });
   });
+
+
+function addNewTab(group, tab){
+  $.post("http://crossoverdev.parseapp.com/newTabs", {
+        newTabs: tab,
+        tabGroup: group
+      }, function(response) {
+        if(response.success) {
+         alert("You made a new tab!");
+         clearHTML();
+         injectAddTabs();
+        }
+        else {
+          alert("There was an error!");
+        }
+      });
+
+}
+
+//function that lets a user create a new group.
+function addNewGroup(group) {
+  var groupName = group
+
+    $.post("http://crossoverdev.parseapp.com/newTabGroup", {
+        title: groupName
+      }, function(response) {
+        if(response.success) {
+         alert("You made a new tab Group");
+        }
+        else {
+          alert("There was an error!");
+        }
+      });
+}
+
 
 
 //Logic for the back buttion in the addGroupView
@@ -599,20 +678,8 @@ function fillGroupDropDown(){
       //$('#tabGROUP').append("<option value="+ dataID[i-1] +"'>"+dogeID[i-1]+"</option>");
     }
    }
+   $('#tabGROUP').append("<option value='newGroup'>Add a new group</option>");
 }
-/*function getUserGroups(){
-  $.post("http://crossoverdev.parseapp.com/getTabGroups", {
-        user: "fake@gmail.com"
-      }, function(response) {
 
-        //alert(response);
-        //alert(response.success);
 
-        if(response.success) {
-          alert(response.tabGroups);
-        }
-        else {
-          alert("There was an error");
-        }
-      });
-}*/
+

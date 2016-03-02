@@ -18,7 +18,8 @@
  
 },
 "permissions": [
-   "tabs"
+   "tabs",
+   "storage"
 ],
 "background": {
   "scripts": ["background.js", "popup.js"]

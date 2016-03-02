@@ -9,7 +9,7 @@
     <title>Crossover</title>
     <style>
       body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+        
         font-size: 100%;
       }
       #status {
@@ -21,17 +21,8 @@
       }
     </style>
     <link rel='stylesheet' type='text/css' href='popupstyle.css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <script src="/jquery-2.1.3.min.js"></script>
-
-    
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
-    
-   
   </head>
   <body>
     <div id="displayBody">
@@ -45,9 +36,11 @@
     </div>
 
     <template id='loginStuff'>
+      <div id='loginINPUTDIV'>
       <input type='text' id="name" placeholder="username or email"/>
       <input type='text' id = 'pass' placeholder="l33t passwords"/>
       <input type="button" class="popButton" id="subButton" value="submit"/>
+    </div>
     </template>
 
     <template id='userStuff'>
@@ -64,9 +57,9 @@
     </template>
 
     <template id="Titles">
-        <p id="greeting">Welcome to Crossover!</p>
-        <p id="titleForTGs">List of Tab Groups</p>
-        <p id="TabGroupTitle"></p>
+        <p class='extTitle' id="greeting">Welcome to Crossover!</p>
+        <p class='extTitle' id="titleForTGs">List of Tab Groups</p>
+        <p class='extTitle' id="TabGroupTitle"></p>
     </template>
     
     <template id="Buttons">
@@ -94,16 +87,16 @@
     
     <template id='addTabView'>
       <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
-      <p>Add a tab</p>
+      <p class='extTitle'>Add a tab</p>
       <input type='text' id="tabTITLE" placeholder="Title"/>
       <input type='text' id = 'tabURL' placeholder="URL"/>
-      <!-- <input type='text' id = 'tabGROUP' placeholder="Tab Group"/> -->
+      <input type='text' id = 'newTabGROUP' placeholder="Tab Group"/>
       <select id = "tabGROUP"></select>
       <input type="button" class="popButton" id="addTab" value="Add it!"/>
     </template>
 
     <template id='addGroupView'>
-      <p>Add a new Group</p>
+      <p class='extTitle'>Add a new Group</p>
       <input type='text' id="groupTITLE" placeholder="Group Name"/>
       <input type="button" class="popButton" id="addGRP" value="Add it!"/>
     </template>
@@ -112,4 +105,5 @@
 </html>
 
 <script src="popup.js"></script>
+<script src="parseSDK.js"></script>
 <script src="background.js"></script>

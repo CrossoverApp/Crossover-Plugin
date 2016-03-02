@@ -1,13 +1,42 @@
-body{
-	background-color: #5C7473;
+html{
+	font-family: 'Droid Sans', sans-serif;
 }
+
+body{
+	background-color: #3e454c;
+	font: Helvetica,Arial,sans-serif;
+}
+
+/* #5C7473 */
 
 #displayBody{
 	width: 350px;
+	padding: 0px;
 }
 
-#greeting{
-	margin-left: 110px;
+
+
+#optionBar{
+	width: 100%;
+	border: 1px solid #3e454c ;
+	background: #3e454c; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#3e454c,#CFD8DC, #3e454c); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#3e454c,#CFD8DC, ##3e454c); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#3e454c,#CFD8DC, #3e454c); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#3e454c,#CFD8DC, #3e454c); /* Standard syntax */
+    margin-right: 100px;
+}
+
+#optionBar *{
+	margin-right: 8px;
+	margin-left: 8px;
+}
+
+.extTitle{
+	font-family: 'Droid Sans', sans-serif;
+	margin-left: 85px;
+	font-weight: bold;
+	color: white;
 }
 
 #tabButtons{
@@ -18,26 +47,36 @@ body{
 	margin-left: 150px;
 }
 
-#loginInfo{
+#loginINPUTDIV{
 	margin-left: 80px;
+
 }
 
 #subButton{
-	margin-left: 3px;
-	margin-top: -50px;
+	float: right;
+	margin-right: 30px;
+	margin-top: -20px;
 }
 
-/*#backUserStuff{
-	margin-left: 80px;
-}*/
+#name{
+	margin-top: -10px;
+}
+
+#newTabGROUP{
+	display: none;
+}
+
+
 
 .tabGroupButtons{
 	margin-left: 80px;
 }
+
 /*
 	custom css for popup buttons, might be too front heavy for actual use 
 	but fine for right now
 */
+
 .popButton {
 	-moz-box-shadow:inset -1px 5px 8px 1px #91b8b3;
 	-webkit-box-shadow:inset -1px 5px 8px 1px #91b8b3;
@@ -49,7 +88,7 @@ body{
 	background:-ms-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
 	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#768d87', endColorstr='#6c7c7c',GradientType=0);
-	background-color:#768d87;
+	background-color:#3e454c;
 	-moz-border-radius:9px;
 	-webkit-border-radius:9px;
 	border-radius:9px;
@@ -78,6 +117,7 @@ body{
 	position:relative;
 	top:1px;
 }
+
 
 /*.popButtonChecked {
 	-moz-box-shadow:inset -1px 5px 8px 1px #91b8b3;
@@ -119,3 +159,6 @@ body{
 	position:relative;
 	top:1px;
 }*/
+
+
+
