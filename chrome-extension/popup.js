@@ -1,4 +1,5 @@
 var doge;
+var re = new RegExp("^(http|https)://", "i"); //regex to check if we
 //var geturl = new RegExp("(http|ftp|https|www)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?", "g");
 var userTabs = ['http://reddit.com', 'http://google.com', 'http://pcpartpicker.com/'];
 var userTabs2 = ['https://www.youtube.com/', 'http://gmail.com', 'http://yahoo.com'];
@@ -508,7 +509,12 @@ $('#loginInfo').on('click', '#addTab', function() {
   var customID =  $('#newTabGROUP').val();
   var taburl = $("#tabURL").val(); 
   var tabtitle = $("#tabTITLE").val();
+  var match = re.test(taburl);
 
+  if(!match){
+    taburl = "https://" + taburl;
+    }
+  
   var tab = {
             title: tabtitle,
             url: taburl
@@ -574,6 +580,7 @@ $('#loginInfo').on('click', '#addTab', function() {
 //Injects the add group view, here the user can create new tab groups for their  profile
 //Turn this into a function later.
 $('#loginInfo').on('click', '#addNewGroup', function() {
+    $("#displayBody").html("");
     var text = $("#addGroupView").html();
     clearHTML();
     $('#loginInfo').append(text);
@@ -652,6 +659,7 @@ function clearHTML(){
 
 //Injects the add tab view into the viewing area
 function injectAddTabs(){
+  $("#displayBody").html("");
   var text = $("#addTabView").html();
   $('#loginInfo').html("");
   $('#loginInfo').append(text);

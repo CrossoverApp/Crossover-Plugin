@@ -1,10 +1,10 @@
 html{
-	font-family: 'Droid Sans', sans-serif;
+	font-family: 'Montserrat', sans-serif;
 }
 
 body{
 	background-color: #3e454c;
-	font: Helvetica,Arial,sans-serif;
+	font-family: 'Montserrat', sans-serif;
 }
 
 /* #5C7473 */
@@ -13,8 +13,6 @@ body{
 	width: 350px;
 	padding: 0px;
 }
-
-
 
 #optionBar{
 	width: 100%;
@@ -29,11 +27,26 @@ body{
 
 #optionBar *{
 	margin-right: 8px;
-	margin-left: 8px;
+	margin-left: 10px;
 }
 
+/* this is the div that holds all of the tab groups*/
+#tabsList{
+	margin-left: 20px;
+	margin-top: 5px;
+	padding: 5px 5px 5px 5px;
+	background-color: #CFD8DC;
+	width: 85%;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+/* all of the titles for the extension */
 .extTitle{
-	font-family: 'Droid Sans', sans-serif;
+	font-family: 'Montserrat', sans-serif;
 	margin-left: 85px;
 	font-weight: bold;
 	color: white;
@@ -49,7 +62,6 @@ body{
 
 #loginINPUTDIV{
 	margin-left: 80px;
-
 }
 
 #subButton{
@@ -62,11 +74,28 @@ body{
 	margin-top: -10px;
 }
 
-#newTabGROUP{
-	display: none;
+#newGroupDiv{
+	display: inline-block;
+	margin-left: 40px;
+}
+
+#newTabDiv{
+	display: inline-block;
+	margin-right: -30px;
+}
+
+#newTabInput{
+	margin-top: 5px;
 }
 
 
+#newTabGROUP{
+	display: none;
+}
+/* styling for group buttons */
+.allTabs{
+	margin-bottom: 5px;
+}
 
 .tabGroupButtons{
 	margin-left: 80px;

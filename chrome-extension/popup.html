@@ -21,7 +21,8 @@
       }
     </style>
     <link rel='stylesheet' type='text/css' href='popupstyle.css'/>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="/jquery-2.1.3.min.js"></script>
   </head>
   <body>
@@ -57,15 +58,15 @@
     </template>
 
     <template id="Titles">
-        <p class='extTitle' id="greeting">Welcome to Crossover!</p>
-        <p class='extTitle' id="titleForTGs">List of Tab Groups</p>
+        <p class='extTitle' id="greeting"><i class="fa fa-arrows-alt"></i> Welcome to Crossover!</p>
+        <p class='extTitle' id="titleForTGs">Your Tab Groups</p>
         <p class='extTitle' id="TabGroupTitle"></p>
     </template>
     
     <template id="Buttons">
         <input type="button" class="popButton" id="backUserStuff" value="Back"/>
         <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
-        <input type="button" class="popButton" id="GroupButton" value="" data-id=""/>
+        <input type="button" class="popButton allTabs" id="GroupButton" value="" data-id=""/>
         <input type="button" class="popButton" id="OpenAll" value="Open All Tabs" data-group=""/>
         <input type="button" class="popButton" id="OpenSelect" value="Open Selected Tabs"/>
         <input type="button" class="popButton" id="OpenSome" value="Open Some Tabs"/>
@@ -86,19 +87,26 @@
     </template>
     
     <template id='addTabView'>
-      <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
       <p class='extTitle'>Add a tab</p>
-      <input type='text' id="tabTITLE" placeholder="Title"/>
-      <input type='text' id = 'tabURL' placeholder="URL"/>
-      <input type='text' id = 'newTabGROUP' placeholder="Tab Group"/>
-      <select id = "tabGROUP"></select>
-      <input type="button" class="popButton" id="addTab" value="Add it!"/>
+      <div class='newTabDiv' style="margin-left:80px;">
+        <input type='text' class='newTabInput' id="tabTITLE" placeholder="Title"/>
+        <input type='text' class='newTabInput' id = 'tabURL' placeholder="URL"/>
+        <input type='text' class='newTabInput' id = 'newTabGROUP' placeholder="Tab Group"/>
+        <div>
+          <select id = "tabGROUP"></select>
+        <div>
+      </div>
+        <input type="button" class="popButton" id="addTab" value="Add it!"/>
+        <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
+      
     </template>
 
     <template id='addGroupView'>
       <p class='extTitle'>Add a new Group</p>
+      <div id='newGroupDiv'>
       <input type='text' id="groupTITLE" placeholder="Group Name"/>
       <input type="button" class="popButton" id="addGRP" value="Add it!"/>
+    </div>
     </template>
 
   </body>

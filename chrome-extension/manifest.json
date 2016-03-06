@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Doge extension",
-  "description": "Crossover, the best way to share tabs",
-  "version": "0.1",
+  "name": "Crossover",
+  "description": "Crossover, the best way to share and manage your tabs across any platform!",
+  "version": "0.7",
   "content_scripts": [
   {
     "matches": [
@@ -12,8 +12,8 @@
   }
 ],
 "browser_action": {
-  "default_icon": "the_doge.png",
-  "default_title": "Top Doge",
+  "default_icon": "favicon-arrows-alt.png",
+  "default_title": "Crossover",
   "default_popup": "popup.html"
  
 },
