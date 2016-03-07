@@ -36,6 +36,7 @@
     <div id="loginInfo">
     </div>
 
+    <!--View for letting user to login-->
     <template id='loginStuff'>
       <div id='loginINPUTDIV'>
       <input type='text' id="name" placeholder="username or email"/>
@@ -44,11 +45,7 @@
     </div>
     </template>
 
-    <template id='userStuff'>
-      <input type="button" class="popButton" id="openGroups" value="view groups"/>
-      <input type="button" class="popButton" id="openTab" value="open tabs"/>
-    </template>
-
+    <!--View for list of tab groups-->
     <template id="tabGroups">
             <div id="optionBar"></div>
             <div id="tabsList"></div>
@@ -57,12 +54,14 @@
             <input type="button" class="popButton" id="addView" value="Add Tab"/--> 
     </template>
 
+    <!--Titles for various views-->
     <template id="Titles">
         <p class='extTitle' id="greeting"><i class="fa fa-arrows-alt"></i> Welcome to Crossover!</p>
         <p class='extTitle' id="titleForTGs">Your Tab Groups</p>
         <p class='extTitle' id="TabGroupTitle"></p>
     </template>
     
+    <!--Buttons used over many views-->
     <template id="Buttons">
         <input type="button" class="popButton" id="backUserStuff" value="Back"/>
         <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
@@ -73,19 +72,24 @@
         <input type="button" class="popButton" id="TabButton" value="" href="" data-group=""/>
         <input type="button" class="popButton" id="addView" value="Add Tab"/>
         <input type="button" class="popButton" id="addSaveAllTabs" value="Save all Tabs"/>
+        <input type="button" class="popButton" id="saveAllTabs" value="Add all!"/>
+        <input type="button" class="popButton" id="addSaveSomeTabs" value="Save some Tabs"/>
+        <input type="button" class="popButton" id="saveSomeTabs" value="Add some!"/>
         <input type="button" class="popButton" id="addNewGroup" value="Add a group"/>
     </template>
     
+    <!--Option will be copied and filled with tab group info-->
     <template id="Misc">
         <option id="addTabOption" value=""></option>
     </template>
     
+    <!--View for save all and save some tabs-->
     <template id='saveAllTabView'>
         <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
         <select id = "tabGROUP"></select>
-        <input type="button" class="popButton" id="saveAllTabs" value="Add it!"/>
     </template>
     
+    <!--View for adding a tab to a group-->
     <template id='addTabView'>
       <p class='extTitle'>Add a tab</p>
       <div class='newTabDiv' style="margin-left:80px;">
@@ -97,10 +101,10 @@
         <div>
       </div>
         <input type="button" class="popButton" id="addTab" value="Add it!"/>
-        <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
-      
+        <input type="button" class="popButton" id="backGroupStuff" value="Back"/>  
     </template>
 
+    <!--View for adding a new group-->
     <template id='addGroupView'>
       <p class='extTitle'>Add a new Group</p>
       <div id='newGroupDiv'>

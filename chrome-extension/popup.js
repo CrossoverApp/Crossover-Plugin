@@ -15,19 +15,6 @@ var bkg = chrome.extension.getBackgroundPage();
 
 // on document ready we insert the login page
 document.addEventListener('DOMContentLoaded', function() {
-  /*
-  if(!get_cookie()){
-    loadLogin();
-    var template = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
-    $('#tabsList').append(template);
-  }
-  else{
-    var text = $("#addTabView").html();
-    clearHTML();
-    $('#loginInfo').append(text);
-    
-  }
-  */
   loadLogin();
     var template = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
     $('#tabsList').append(template);
@@ -60,18 +47,15 @@ function get_cookie() {
 
 // makes a call to the database to update the tabGroup and data ID lists
 function getTabGroupInfo(){
-    //bkg.console.log("Hello");
     var temp;
     $.ajax({
         async: false,
         type: 'GET',
         url: 'http://crossoverdev.parseapp.com/getTabGroups',
         success: function(data) {
-            //bkg.console.log("Made it");
             temp = data;
             JsonTGL = temp.tabGroups;
             for(i=0; i < doge.tabGroups.length; i++){
-                //alert(doge.tabGroups[1].title);
                 dogeID.push(doge.tabGroups[i].title);
                 dataID.push(doge.tabGroups[i].id);
             }
@@ -80,7 +64,6 @@ function getTabGroupInfo(){
             bkg.console.log("failed to load tab groups");
         }
     });
-    //bkg.console.log("Bye");
 }
 
 
@@ -92,10 +75,8 @@ function getTabsInfo(tabGroupTitle){
         type: 'GET',
         url: 'http://crossoverdev.parseapp.com/getTabGroupTabs',
         success: function(data) {
-            //bkg.console.log("Made it2");
             temp = data;
             JsonTbL = temp.tabs;
-            bkg.console.log(temp.tabs);
         },
         error: function(data){
             //bkg.console.log(data.message);
@@ -119,50 +100,38 @@ function loadLogin(){
 
 // loads in the option bar and populates the field with user tab groups
 function loadTabGroups(){
-    
-    
-    
-    
     $('#displayBody').html('');
     var title =  document.querySelector('#Titles').content.querySelector('#titleForTGs').cloneNode(true);
     $('#displayBody').append(title);
 
-    
     $('#optionBar').html('');
     var addAll = document.querySelector('#Buttons').content.querySelector('#addSaveAllTabs').cloneNode(true);
+    var addSom = document.querySelector('#Buttons').content.querySelector('#addSaveSomeTabs').cloneNode(true);
     var addGrp = document.querySelector('#Buttons').content.querySelector('#addNewGroup').cloneNode(true);
     var addTab = document.querySelector('#Buttons').content.querySelector('#addView').cloneNode(true);
 
     $('#optionBar').append(addAll);
+    $('#optionBar').append(addSom);
     $('#optionBar').append(addGrp);
     $('#optionBar').append(addTab);
     
     $('#tabsList').html('');
     
     var backButton = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
-    //$('#tabsList').append(backButton);
     
-    //$('#tabsList').append("<br>");
-    
-    var tGList = JsonTGL;//.tabGroups;
-    //bkg.console.log("loop");
-    //bkg.console.log(tGList.length);
+    //Populates the view with buttons that are the tab groups
+    var tGList = JsonTGL;
     for(i=0; i < tGList.length; i++){
-        bkg.console.log(tGList[i]);
         var template = document.querySelector('#Buttons').content.querySelector('#GroupButton').cloneNode(true);
-        //bkg.console.log(template);
         template.value = tGList[i].title;
         template.dataset.id = tGList[i].id;
         $('#tabsList').append(template);
         $('#tabsList').append("<br>");
-        //$('#tabsList').append("<br>");
-        //bkg.console.log(template);
     }
 }
 
 // populates the option bar with various buttons
 function loadTabButtons(groupButton){
-    //bkg.console.log("LTB");
     $('#tabsList').html('');
     var inputTabs;
     var group = groupButton.value;
@@ -189,43 +158,70 @@ function loadTabButtons(groupButton){
     
     $('#optionBar').append("<br>");
     
-    for (i=0; i<inputTabs.length; i++){//tab in userTabs){
+    //Populates page with buttons that are the tabs of the group
+    for (i=0; i<inputTabs.length; i++){
         var template = document.querySelector('#Buttons').content.querySelector('#TabButton').cloneNode(true);
         
         template.value=inputTabs[i].title;
         template.setAttribute("href",inputTabs[i].url);
         template.dataset.group = group;
-        //bkg.console.log(template);
         
         $('#tabsList').append(template);
         $('#tabsList').append("<br>");
     }
 }
 
+//Opens a tab from a given url
 function openSpecificTab(tab){
     chrome.tabs.create({"url":tab.getAttribute("href")});
 }
 
+//Opens all the tabs from a specific group
 function openAllInCurrentGroup(){
     for(var j=0; j<JsonTbL.length; j++){
         chrome.tabs.create({"url":JsonTbL[j].url});
     }
 }
 
-function loadSaveAllTabView(){
+//Loads the save all and save some view
+function loadSaveAllTabView(saveType){
     var text = $("#saveAllTabView").html();
     $('#loginInfo').html("");
     $('#loginInfo').append(text);
     fillGroupDropDown();
+    if(saveType === "all"){
+        var saveButton = document.querySelector('#Buttons').content.querySelector('#saveAllTabs').cloneNode(true);
+        $('#loginInfo').append(saveButton);
+    } else if (saveType === "some"){
+        var saveButton = document.querySelector('#Buttons').content.querySelector('#saveSomeTabs').cloneNode(true);
+        $('#loginInfo').append(saveButton);
+        var tabsList = document.querySelector('#tabGroups').content.querySelector('#tabsList').cloneNode(true);
+        $('#loginInfo').append(tabsList);
+        getAllTabs();
+        chrome.runtime.onMessage.addListener(
+            function(request, sender, sendResponse) {
+                if( request.message === "GotTabs" ) {
+                    openSome = true;
+                    for (i=0; i<allTabs.length; i++){
+                        var template = document.querySelector('#Buttons').content.querySelector('#TabButton').cloneNode(true);
+                        
+                        template.value=allTabs[i].title;
+                        template.setAttribute("href",allTabs[i].url);
+                        
+                        $('#tabsList').append(template);
+                        $('#tabsList').append("<br>");
+                    }
+                }
+            }
+        );
+    }
 }
 
+//Gets all of the tabs from the current window
 function getAllTabs(){
     allTabs = [];
     chrome.tabs.query({currentWindow: true}, function(tabs) {
-        //var activeTab = tabs;
-        //bkg.console.log(tabs.length);
         for(var i =0; i < tabs.length; i++){
-            //url.push(tabs[i].url);
             allTabs.push({
                 title: tabs[i].title,
                 url: tabs[i].url
@@ -245,9 +241,7 @@ $('#loginInfo').on('click', '#subButton', function() {
   var name = $("#name").val();
   var pass = $("#pass").val();
   var text = $("#tabGroups").html();
-  //var text = $("#userStuff").html();
-  bkg.console.log("pressed submit");
-  //fake@gmail.com 1234
+  //fake@gmail.com 1234 (Test account)
   $.post("http://crossoverdev.parseapp.com/user", {
         email: name,
         password: pass
@@ -291,6 +285,7 @@ $('#loginInfo').on('click', '#addView', function() {
         $('#loginInfo').append(text);
     }
     loadTabGroups();
+    openSome = false;
 });
 
 
@@ -315,6 +310,16 @@ $('#loginInfo').on('click', '#TabButton', function() {
     }
 });
 
+//Opens all tabs in a group
+$('#loginInfo').on('click', '#OpenAll', function(){
+    var tabButtons = $('.popButton');
+    var tabLength = tabButtons.length;
+    for(var b = 0; b<tabLength; b++){
+        if(tabButtons[b].getAttribute("id")==="TabButton"){
+            chrome.tabs.create({"url":tabButtons[b].getAttribute("href")});
+        }
+    }
+})
 
 //This changes the class of the tab button, if changed we select multiple tabs to be opened.
 $('#loginInfo').on('click', '#OpenSome', function(){
@@ -346,7 +351,13 @@ $('#loginInfo').on('click', '#OpenSelect', function(){
 //Saves all current open tabs
 $('#loginInfo').on('click', '#addSaveAllTabs', function(){
     clearHTML();
-    loadSaveAllTabView();
+    loadSaveAllTabView("all");
+});
+
+//Saves some tabs from current window
+$('#loginInfo').on('click', '#addSaveSomeTabs', function(){
+    clearHTML();
+    loadSaveAllTabView("some");
 });
 
 
@@ -356,44 +367,40 @@ $('#loginInfo').on('click', '#saveAllTabs', function(){
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
             if( request.message === "GotTabs" ) {
-                bkg.console.log("I got tabs");
                 addTabBunch();
             }
         }
     );
-    
+});
+
+$('#loginInfo').on('click', '#saveSomeTabs', function(){
+    var tabButtons = $('.popButtonChecked');
+    var tabLength = tabButtons.length;
+    allTabs = [];
+    for(var i =0; i < tabButtons.length; i++){
+        allTabs.push({
+            title: tabButtons[i].getAttribute("value"),
+            url: tabButtons[i].getAttribute("href")
+        });
+    }
+    for(var j = 0; j<allTabs.length; j++){
+        bkg.console.log(allTabs[j].title +" "+ allTabs[j].url);
+    }
+    addTabBunch();
+    openSome = false;
 });
 
 // adds a selected group of tabs
 function addTabBunch(){
     var groupId = $("#tabGROUP").val();
-    bkg.console.log(allTabs.length);
-    for(var i=0; i<allTabs.length; i++){
-        bkg.console.log(allTabs[i].title + " " + allTabs[i].url);
-    }
     for(var i=0; i<allTabs.length; i++){
         var putTab = [allTabs[i]];
-        bkg.console.log("Loading: " +i);
-        /*$.post("http://crossoverdev.parseapp.com/newTabs", {
-            newTabs: allTabs[i],
-            tabGroup: groupId
-        }, function(response) {
-            if(response.success) {
-                bkg.console.log("You made a new tab!");
-                clearHTML();
-                injectAddTabs();
-            } else {
-                alert("There was an error!");
-            }
-        });*/
         $.ajax({
             async: false,
             type: 'POST',
             url: 'http://crossoverdev.parseapp.com/newTabs',
             success: function(data) {
                 bkg.console.log("You made a new tab!");
-                //clearHTML();
-                //injectAddTabs();
             },
             error: function(data){
                 alert(data.message);
@@ -404,7 +411,15 @@ function addTabBunch(){
             }
         });
     }
-    bkg.console.log("Made it to save all tabs button");
+    
+    var text = $("#tabGroups").html();
+    dogeID = [];
+    dataID = [];
+    clearHTML();
+    getTabGroupInfo();
+    $('#loginInfo').append(text);
+    loadTabGroups();
+    loadTabGroups();
 }
 
 // logic that shows or hides the custom group input in the addTabView
@@ -523,7 +538,7 @@ $('#loginInfo').on('click', '#addGRP', function() {
       });
   });
 
-
+//Adds a tab to a group in the database
 function addNewTab(group, tab){
   $.post("http://crossoverdev.parseapp.com/newTabs", {
         newTabs: tab,
@@ -585,11 +600,9 @@ function injectAddTabs(){
   fillGroupDropDown();
 }
 
+//Fills in the dropdown menu with the titles and info for tab groups
 function fillGroupDropDown(){
   var addOption;
-  //bkg.console.log(dogeID.length);
-  bkg.console.log("AddTab");
-  bkg.console.log(JsonTGL.length);
   for(i=0; i < JsonTGL.length + 1; i++){
     if(i == 0){
       //$('#tabGROUP').append("<option value='newGroup'>Add a new group</option>");
@@ -598,10 +611,7 @@ function fillGroupDropDown(){
       addOption = document.querySelector('#Misc').content.querySelector('#addTabOption').cloneNode(true);
       addOption.value = JsonTGL[i-1].id;
       addOption.innerHTML = JsonTGL[i-1].title;
-      bkg.console.log(document);
-      bkg.console.log(addOption);
       $('#tabGROUP').append(addOption);
-      //$('#tabGROUP').append("<option value="+ dataID[i-1] +"'>"+dogeID[i-1]+"</option>");
     }
    }
    $('#tabGROUP').append("<option value='newGroup'>Add a new group</option>");
