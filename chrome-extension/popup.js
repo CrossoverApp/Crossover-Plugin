@@ -173,7 +173,14 @@ function loadTabButtons(groupButton){
 
 //Opens a tab from a given url
 function openSpecificTab(tab){
-    chrome.tabs.create({"url":tab.getAttribute("href")});
+    var tabURL = tab.getAttribute("href");
+    
+    var match = re.test(tabURL);
+    if(!match){
+    taburl = "https://" + taburl;
+    }
+    
+    chrome.tabs.create({"url": tabURL});
 }
 
 //Opens all the tabs from a specific group
