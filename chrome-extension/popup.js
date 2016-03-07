@@ -80,10 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
   }
   */
-  
-  Parse.CoreManager.setStorageController(ChromeStorageController());
-  Parse.initialize("PNH3PccfMRTmWXoQxIQ5ikeegABPaxGmUXugzlKw",
-                   "6s9M1c6xVc50CjRerU2RMLhZjODxcTzXqyKFW5Hl");
   loadLogin();
     var template = document.querySelector('#Buttons').content.querySelector('#backUserStuff').cloneNode(true);
     $('#tabsList').append(template);
@@ -170,7 +166,6 @@ function loadLogin(){
 
 function loadTabGroups(){
     //bkg.console.log("Working3");
-    var groupNum = userGroups.length;
     
     
     
@@ -339,18 +334,6 @@ $('#loginInfo').on('click', '#openGroups', function() {
 
   });
 
-
-// Loads the contents of each tab group to display area listHolding
-$('#loginInfo').on('click', '.tabGroupButton', function() {
-     var id = this.id;
-     var idNum = parseInt(id[id.length -1]);
-     $('#listHolding').html("");
-
-     for(i=0; i < userGroups[idNum].length; i++ ){
-        $('#listHolding').append("<p> '"+userGroups[idNum][i] +"'</p>");
-    } 
-
-  });
 
 
 
