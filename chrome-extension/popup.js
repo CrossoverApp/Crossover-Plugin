@@ -12,6 +12,8 @@ var openSome = false;
 var bkg = chrome.extension.getBackgroundPage();
 
 
+
+// on document ready we insert the login page
 document.addEventListener('DOMContentLoaded', function() {
   /*
   if(!get_cookie()){
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#tabsList').append(template);
 });
 
-// sets a cookie that takes variable min that sets cookie to expire after min minutes
+// sets a cookie that takes variable min that sets cookie to expire after min minutes currently this is disabled
 function set_cookie(min) {
     var now = new Date();
     var exp = new Date(now.getTime() + min*60*1000);
@@ -56,7 +58,7 @@ function get_cookie() {
     }  
 }
 
-
+// makes a call to the database to update the tabGroup and data ID lists
 function getTabGroupInfo(){
     //bkg.console.log("Hello");
     var temp;
@@ -115,9 +117,9 @@ function loadLogin(){
 }
 
 
-//
+// loads in the option bar and populates the field with user tab groups
 function loadTabGroups(){
-    //bkg.console.log("Working3");
+    
     
     
     
@@ -158,6 +160,7 @@ function loadTabGroups(){
     }
 }
 
+// populates the option bar with various buttons
 function loadTabButtons(groupButton){
     //bkg.console.log("LTB");
     $('#tabsList').html('');
@@ -249,26 +252,12 @@ $('#loginInfo').on('click', '#subButton', function() {
         email: name,
         password: pass
       }, function(response) {
-
-
         if(response.success) {
-          bkg.console.log("0");
           getTabGroupInfo();
-          bkg.console.log("1");
-          //$('#logIn').toggle("show");
-          //$('#loginInfo').toggle("show");
           $('#loginInfo').html("");
-          bkg.console.log("2");
           $('#loginInfo').append(text);
-          bkg.console.log("3");
-    
-          bkg.console.log("4");
           loadTabGroups();
-          bkg.console.log("5");
-
-          //set_cookie(1);
-          
-          
+          //set_cookie(1); sets the cookie to expire after 1 minute
         }
         else {
           alert("Too Bad");
@@ -285,11 +274,6 @@ $('#loginInfo').on('click', '#openGroups', function() {
     loadTabGroups();
 
   });
-
-
-
-
-
 
 //Injects the add a tab view which lets the user add new tabs to a selected group
 $('#loginInfo').on('click', '#addView', function() {
@@ -318,8 +302,6 @@ $('#loginInfo').on('click', '#GroupButton', function() {
 
 // lets the user select a tabs to be opend from a tab group
 $('#loginInfo').on('click', '#TabButton', function() {
-    //bkg.console.log(this);
-    //bkg.console.log("Press");
     if(openSome){
         if(this.className === "popButton"){
             this.className = "popButtonChecked";
@@ -342,14 +324,12 @@ $('#loginInfo').on('click', '#OpenSome', function(){
         for(var k = 0; k<tabLength; k++){
             tabButtons[k].className = "popButton";
         }
-        //bkg.console.log(tabButtons);
         $('#OpenSelect').remove();
     } else {
         var selectButton = document.querySelector('#Buttons').content.querySelector('#OpenSelect').cloneNode(true);
         $('#OpenSome').after(selectButton);
     }
     openSome = !openSome;
-    //bkg.console.log(openSome);
 });
 
 
@@ -369,6 +349,8 @@ $('#loginInfo').on('click', '#addSaveAllTabs', function(){
     loadSaveAllTabView();
 });
 
+
+//Saves all selected tabs
 $('#loginInfo').on('click', '#saveAllTabs', function(){
     getAllTabs();
     chrome.runtime.onMessage.addListener(
@@ -381,6 +363,8 @@ $('#loginInfo').on('click', '#saveAllTabs', function(){
     );
     
 });
+
+// adds a selected group of tabs
 function addTabBunch(){
     var groupId = $("#tabGROUP").val();
     bkg.console.log(allTabs.length);
@@ -468,7 +452,7 @@ $('#loginInfo').on('click', '#addTab', function() {
             customID = doge.tabGroups[doge.tabGroups.length -1].id;
           });
 
-         setTimeout(function(){
+         setTimeout(function(){  //setting a timeout to ensure database has registered the new group
             $.post("http://crossoverdev.parseapp.com/newTabs", {
                 newTabs: newTab,
                 tabGroup: customID
@@ -513,7 +497,6 @@ $('#loginInfo').on('click', '#addTab', function() {
 
 
 //Injects the add group view, here the user can create new tab groups for their  profile
-//Turn this into a function later.
 $('#loginInfo').on('click', '#addNewGroup', function() {
     $("#displayBody").html("");
     var text = $("#addGroupView").html();
