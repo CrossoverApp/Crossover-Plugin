@@ -1,70 +1,16 @@
 var doge;
 var re = new RegExp("^(http|https)://", "i"); //regex to check if we
-//var geturl = new RegExp("(http|ftp|https|www)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?", "g");
-var userTabs = ['http://reddit.com', 'http://google.com', 'http://pcpartpicker.com/'];
-var userTabs2 = ['https://www.youtube.com/', 'http://gmail.com', 'http://yahoo.com'];
-var userTabs3 = ['http://memebase.com', 'http://http://www.w3schools.com/', 'http://slack.com'];
-var userTabs4 = ['http://memebase.com', 'http://http://www.w3schools.com/', 'http://slack.com'];
-
-var userGroups = [userTabs, userTabs2, userTabs3, userTabs4];
+var userGroups = [];
 var tabGroupID;
-
-var textTGL = '{"tabGroups":[{"id":"Acji5m8nYc","title":"Group 1"},{"id":"s5s17T89aq","title":"Group 2"},{"id":"asdfjkl;","title":"Group 3"}],"success":true}';
-var JsonTGL = JSON.parse(textTGL);
-
 var textTbL;
 var JsonTbL;
-
 var allTabs;
-
 // these two arrays hold the user tab group names and their ID's we use these in the addTab functions to make calls
 var dogeID = [];
 var dataID = [];
-
 var openSome = false;
-
 var bkg = chrome.extension.getBackgroundPage();
 
-  function ChromeStorageController(){
-        var store = {};//Object.create(null);
-        store.async = 1;
-        store.getItemAsync = function(path){
-            var get = new Parse.Promise()
-            chrome.storage.local.get(path,function(data){
-                    //careful here: get return a key,value pair but we only need the value
-                    get.resolve(data[path]);
-            });
-            return get;
-        };
-        store.setItemAsync = function(path,value){
-            var set = new Parse.Promise()
-            var item = Object.create(null);
-            item[path] = value;
-            chrome.storage.local.set(item, function(err){
-                if(err){
-                    set.reject(err);
-                }else{
-                    set.resolve(value);
-                }
-            });
-            return set;
-        };
-        store.removeItemAsync = function(path){
-            var remove = new Parse.Promise()
-            chrome.storage.local.remove(path,function(err){
-                if(err){
-                    remove.reject(err);
-                }else{
-                    remove.resolve();
-                }
-            })
-            return remove;
-        };
-        store.clear = function(){
-            chrome.storage.local.clear();
-        };
-        return store;
-    }
 
 document.addEventListener('DOMContentLoaded', function() {
   /*
@@ -135,6 +81,8 @@ function getTabGroupInfo(){
     //bkg.console.log("Bye");
 }
 
+
+//Makes a call to the database to get tab info
 function getTabsInfo(tabGroupTitle){
     var temp;
     $.ajax({
@@ -156,6 +104,8 @@ function getTabsInfo(tabGroupTitle){
     });
 }
 
+
+//Loads the login view
 function loadLogin(){
     var text = $("#loginStuff").html()
     clearHTML();
@@ -164,6 +114,8 @@ function loadLogin(){
     $('#displayBody').append(title);
 }
 
+
+//
 function loadTabGroups(){
     //bkg.console.log("Working3");
     
