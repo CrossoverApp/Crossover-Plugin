@@ -10,6 +10,7 @@ var dogeID = [];
 var dataID = [];
 var openSome = false;
 var bkg = chrome.extension.getBackgroundPage();
+var getTabsFlag = false;
 
 
 
@@ -207,7 +208,8 @@ function loadSaveAllTabView(saveType){
         getAllTabs();
         chrome.runtime.onMessage.addListener(
             function(request, sender, sendResponse) {
-                if( request.message === "GotTabs" ) {
+                if( request.message === "GotTabs" && getTabsFlag) {
+                    getTabsFlag = false;
                     openSome = true;
                     for (i=0; i<allTabs.length; i++){
                         var template = document.querySelector('#Buttons').content.querySelector('#TabButton').cloneNode(true);
@@ -226,6 +228,7 @@ function loadSaveAllTabView(saveType){
 
 //Gets all of the tabs from the current window
 function getAllTabs(){
+    getTabsFlag = true;
     allTabs = [];
     chrome.tabs.query({currentWindow: true}, function(tabs) {
         for(var i =0; i < tabs.length; i++){
@@ -373,7 +376,8 @@ $('#loginInfo').on('click', '#saveAllTabs', function(){
     getAllTabs();
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
-            if( request.message === "GotTabs" ) {
+            if( request.message === "GotTabs" && getTabsFlag) {
+                getTabsFlag = false;
                 addTabBunch();
             }
         }
