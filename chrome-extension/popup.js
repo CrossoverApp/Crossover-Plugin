@@ -138,7 +138,7 @@ function loadTabButtons(groupButton){
     
     $('#displayBody').html('');
     var title =  document.querySelector('#Titles').content.querySelector('#TabGroupTitle').cloneNode(true);
-    title.innerHTML = group;
+    title.innerHTML = "<i class='fa fa-arrows-alt'></i> " + group;
     $('#displayBody').append(title);
     
 

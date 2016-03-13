@@ -57,8 +57,8 @@
     <!--Titles for various views-->
     <template id="Titles">
         <p class='extTitle' id="greeting"><i class="fa fa-arrows-alt"></i> Welcome to Crossover!</p>
-        <p class='extTitle' id="titleForTGs">Your Tab Groups</p>
-        <p class='extTitle' id="TabGroupTitle"></p>
+        <p class='extTitle' id="titleForTGs"><i class="fa fa-arrows-alt"></i> Your Tab Groups</p>
+        <p class='extTitle' id="TabGroupTitle"><i class="fa fa-arrows-alt"></i> </p>
     </template>
     
     <!--Buttons used over many views-->
@@ -67,15 +67,15 @@
         <input type="button" class="popButton" id="backGroupStuff" value="Back"/>
         <input type="button" class="popButton allTabs" id="GroupButton" value="" data-id=""/>
         <input type="button" class="popButton" id="OpenAll" value="All Tabs" data-group=""/>
-        <input type="button" class="popButton" id="OpenSelect" value="Open Selected Tabs"/>
+        <input type="button" class="popButton" id="OpenSelect" value="Open Selected"/>
         <input type="button" class="popButton" id="OpenSome" value="Some Tabs"/>
         <input type="button" class="popButton" id="TabButton" value="" href="" data-group=""/>
         <input type="button" class="popButton" id="addView" value="Add Tab"/>
-        <input type="button" class="popButton" id="addSaveAllTabs" value="Save all Tabs"/>
+        <input type="button" class="popButton" id="addSaveAllTabs" value="Save all"/>
         <input type="button" class="popButton" id="saveAllTabs" value="Add all!"/>
-        <input type="button" class="popButton" id="addSaveSomeTabs" value="Save some Tabs"/>
+        <input type="button" class="popButton" id="addSaveSomeTabs" value="Save some"/>
         <input type="button" class="popButton" id="saveSomeTabs" value="Add some!"/>
-        <input type="button" class="popButton" id="addNewGroup" value="Add a group"/>
+        <input type="button" class="popButton" id="addNewGroup" value="Add group"/>
     </template>
     
     <!--Option will be copied and filled with tab group info-->
@@ -117,5 +117,4 @@
 </html>
 
 <script src="popup.js"></script>
-<script src="parseSDK.js"></script>
 <script src="background.js"></script>
